@@ -5,6 +5,14 @@ public class TopSecretResponse {
 	private Position position;
 	private String message;
 
+	public TopSecretResponse() {
+	}
+
+	public TopSecretResponse(Position position, String message) {
+		this.position = position;
+		this.message = message;
+	}
+
 	public Position getPosition() {
 		return position;
 	}

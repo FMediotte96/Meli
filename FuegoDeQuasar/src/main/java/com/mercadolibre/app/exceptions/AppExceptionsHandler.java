@@ -21,5 +21,16 @@ public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(errorMessageDescription, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(value = {NotEnoughInformationException.class})
+	public ResponseEntity<Object> handleNotEnoughInformationException(Exception ex, WebRequest request) {
+		String errorMessageDescription = ex.getLocalizedMessage();
+
+		if (errorMessageDescription == null) {
+			errorMessageDescription = ex.toString();
+		}
+
+		return new ResponseEntity<>(errorMessageDescription, new HttpHeaders(), HttpStatus.NO_CONTENT);
+	}
 
 }

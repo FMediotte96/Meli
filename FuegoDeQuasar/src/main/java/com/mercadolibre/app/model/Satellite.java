@@ -4,6 +4,8 @@ public class Satellite {
 
 	private String name;
 	private Position position;
+	private double distanceFromShip;
+	private String[] receiptMessage;
 
 	public Satellite() {
 	}
@@ -27,6 +29,22 @@ public class Satellite {
 
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	public double getDistanceFromShip() {
+		return distanceFromShip;
+	}
+
+	public void setDistanceFromShip(double distanceFromShip) {
+		this.distanceFromShip = distanceFromShip;
+	}
+
+	public String[] getReceiptMessage() {
+		return receiptMessage;
+	}
+
+	public void setReceiptMessage(String[] receiptMessage) {
+		this.receiptMessage = receiptMessage;
 	}
 
 }
