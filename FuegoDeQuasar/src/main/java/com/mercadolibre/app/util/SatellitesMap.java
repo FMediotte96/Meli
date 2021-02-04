@@ -21,6 +21,7 @@ public class SatellitesMap {
 	}
 
 	private SatellitesMap() {
+		//NO OLVIDAR MODIFICAR LAS POSICIONES DE LOS SATELITES
 		Satellite kenobi = new Satellite("kenobi", new Position(0,0));
 		Satellite skywalker = new Satellite("skywalker", new Position(10,10));
 		Satellite sato = new Satellite("sato", new Position(0,20));
@@ -47,7 +48,7 @@ public class SatellitesMap {
 			updateSatellite.setDistanceFromShip(s.getDistance());
 			satellites.put(updateSatellite.getName(), updateSatellite);
 		} catch (NullPointerException e) {
-			throw new SatelliteDoesNotExistsException("No existe el satellite: " + s.getName() 
+			throw new SatelliteDoesNotExistsException("No existe el satelite: " + s.getName() 
 				+ " enviado como parametro");
 		}
 		

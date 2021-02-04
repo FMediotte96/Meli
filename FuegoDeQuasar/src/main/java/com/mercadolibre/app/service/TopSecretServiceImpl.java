@@ -144,7 +144,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 											.collect(Collectors.toList());
 		
 		//Si no tengo todas las parte del mensaje no puedo decodificar el mismo
-		if(messages.isEmpty()) {
+		if(!messages.isEmpty()) {
 			return topSecret;
 		}
 		
@@ -156,7 +156,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 											.toArray();
 		
 		//Si no tengo todas las distancias hacia la nave no puede determinar su posición
-		if(distances != null) {
+		if(distances.length != 0) {
 			return topSecret;
 		}
 		

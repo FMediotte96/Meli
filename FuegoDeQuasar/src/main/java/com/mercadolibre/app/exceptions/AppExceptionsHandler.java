@@ -36,7 +36,7 @@ public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
 		
 		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
 
-		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(value = { SatelliteDoesNotExistsException.class })
