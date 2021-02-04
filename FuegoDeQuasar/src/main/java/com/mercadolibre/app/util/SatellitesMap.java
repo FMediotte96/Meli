@@ -3,6 +3,7 @@ package com.mercadolibre.app.util;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import com.mercadolibre.app.exceptions.SatelliteDoesNotExistsException;
 import com.mercadolibre.app.model.Position;
 import com.mercadolibre.app.model.Satellite;
 import com.mercadolibre.app.model.SatelliteRequest;
@@ -20,9 +21,9 @@ public class SatellitesMap {
 	}
 
 	private SatellitesMap() {
-		Satellite kenobi = new Satellite("Kenobi", new Position(0,0));
-		Satellite skywalker = new Satellite("Skywalker", new Position(10,10));
-		Satellite sato = new Satellite("Sato", new Position(0,20));
+		Satellite kenobi = new Satellite("kenobi", new Position(0,0));
+		Satellite skywalker = new Satellite("skywalker", new Position(10,10));
+		Satellite sato = new Satellite("sato", new Position(0,20));
 		
 		satellites = new LinkedHashMap<String, Satellite>();
 		
@@ -39,11 +40,17 @@ public class SatellitesMap {
 		return satellites;
 	}
 	
-	public void completeDataForSatellite(SatelliteRequest s) {
-		Satellite updateSatellite = satellites.get(s.getName());
-		updateSatellite.setReceiptMessage(s.getMessage());
-		updateSatellite.setDistanceFromShip(s.getDistance());
-		satellites.put(updateSatellite.getName(), updateSatellite);
+	public void completeDataForSatellite(SatelliteRequest s) throws SatelliteDoesNotExistsException {
+		Satellite updateSatellite = satellites.get(s.getName().toLowerCase());
+		try {
+			updateSatellite.setReceiptMessage(s.getMessage());
+			updateSatellite.setDistanceFromShip(s.getDistance());
+			satellites.put(updateSatellite.getName(), updateSatellite);
+		} catch (NullPointerException e) {
+			throw new SatelliteDoesNotExistsException("No existe el satellite: " + s.getName() 
+				+ " enviado como parametro");
+		}
+		
 	}
 	
 	public void clearInfoData() {
