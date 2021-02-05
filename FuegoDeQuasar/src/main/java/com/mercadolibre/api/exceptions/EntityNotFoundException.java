@@ -1,4 +1,4 @@
-package com.mercadolibre.app.exceptions;
+package com.mercadolibre.api.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 

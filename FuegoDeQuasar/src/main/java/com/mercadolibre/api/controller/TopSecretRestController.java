@@ -1,4 +1,4 @@
-package com.mercadolibre.app.controller;
+package com.mercadolibre.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mercadolibre.app.model.TopSecretRequest;
-import com.mercadolibre.app.model.TopSecretResponse;
-import com.mercadolibre.app.service.ITopSecretService;
+import com.mercadolibre.api.model.TopSecretRequest;
+import com.mercadolibre.api.model.TopSecretResponse;
+import com.mercadolibre.api.service.ITopSecretService;
 
 @RestController
 @RequestMapping("/topsecret")

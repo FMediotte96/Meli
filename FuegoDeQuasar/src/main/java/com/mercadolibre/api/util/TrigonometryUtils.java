@@ -1,6 +1,6 @@
-package com.mercadolibre.app.util;
+package com.mercadolibre.api.util;
 
-import com.mercadolibre.app.model.Position;
+import com.mercadolibre.api.model.Position;
 
 /**
  * Clase utils para el uso de funciones trigonemtrias relacionados al calculo

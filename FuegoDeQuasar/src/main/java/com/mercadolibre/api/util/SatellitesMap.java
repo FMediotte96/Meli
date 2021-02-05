@@ -1,13 +1,13 @@
-package com.mercadolibre.app.util;
+package com.mercadolibre.api.util;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import com.mercadolibre.app.exceptions.EntityNotFoundException;
-import com.mercadolibre.app.model.Position;
-import com.mercadolibre.app.model.Satellite;
-import com.mercadolibre.app.model.SatelliteRequest;
+import com.mercadolibre.api.exceptions.EntityNotFoundException;
+import com.mercadolibre.api.model.Position;
+import com.mercadolibre.api.model.Satellite;
+import com.mercadolibre.api.model.SatelliteRequest;
 
 public class SatellitesMap {
 	

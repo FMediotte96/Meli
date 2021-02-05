@@ -1,8 +1,8 @@
-package com.mercadolibre.app.service;
+package com.mercadolibre.api.service;
 
-import com.mercadolibre.app.model.Satellite;
-import com.mercadolibre.app.model.SatelliteRequest;
-import com.mercadolibre.app.model.TopSecretResponse;
+import com.mercadolibre.api.model.Satellite;
+import com.mercadolibre.api.model.SatelliteRequest;
+import com.mercadolibre.api.model.TopSecretResponse;
 
 public interface ITopSecretService {
 

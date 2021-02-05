@@ -9,10 +9,10 @@
 		<version>2.4.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mercadolibre.app</groupId>
-	<artifactId>FuegoDeQuasar</artifactId>
+	<groupId>com.mercadolibre.api</groupId>
+	<artifactId>TopSecretAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FuegoDeQuasar</name>
+	<name>TopSecretAPI</name>
 	<description>Aplicación para obtener ubicación de la nave imperial y el mensaje que emite</description>
 	<properties>
 		<java.version>1.8</java.version>

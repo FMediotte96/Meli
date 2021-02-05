@@ -1,4 +1,4 @@
-package com.mercadolibre.app.exceptions;
+package com.mercadolibre.api.exceptions;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.mercadolibre.app.model.ErrorMessage;
+import com.mercadolibre.api.model.ErrorMessage;
 
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {

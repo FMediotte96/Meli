@@ -1,4 +1,4 @@
-package com.mercadolibre.app.model;
+package com.mercadolibre.api.model;
 
 public class Position {
 	private double x;

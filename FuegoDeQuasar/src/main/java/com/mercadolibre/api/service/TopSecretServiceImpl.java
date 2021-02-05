@@ -1,4 +1,4 @@
-package com.mercadolibre.app.service;
+package com.mercadolibre.api.service;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -6,14 +6,14 @@ import java.util.Objects;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
-import com.mercadolibre.app.exceptions.EntityNotFoundException;
-import com.mercadolibre.app.exceptions.NotEnoughInformationException;
-import com.mercadolibre.app.model.Position;
-import com.mercadolibre.app.model.Satellite;
-import com.mercadolibre.app.model.SatelliteRequest;
-import com.mercadolibre.app.model.TopSecretResponse;
-import com.mercadolibre.app.util.TrigonometryUtils;
-import com.mercadolibre.app.util.SatellitesMap;
+import com.mercadolibre.api.exceptions.EntityNotFoundException;
+import com.mercadolibre.api.exceptions.NotEnoughInformationException;
+import com.mercadolibre.api.model.Position;
+import com.mercadolibre.api.model.Satellite;
+import com.mercadolibre.api.model.SatelliteRequest;
+import com.mercadolibre.api.model.TopSecretResponse;
+import com.mercadolibre.api.util.SatellitesMap;
+import com.mercadolibre.api.util.TrigonometryUtils;
 
 @Service
 public class TopSecretServiceImpl implements ITopSecretService {
