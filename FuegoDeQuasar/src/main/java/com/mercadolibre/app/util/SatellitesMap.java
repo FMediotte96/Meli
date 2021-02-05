@@ -1,9 +1,10 @@
 package com.mercadolibre.app.util;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import com.mercadolibre.app.exceptions.SatelliteDoesNotExistsException;
+import com.mercadolibre.app.exceptions.EntityNotFoundException;
 import com.mercadolibre.app.model.Position;
 import com.mercadolibre.app.model.Satellite;
 import com.mercadolibre.app.model.SatelliteRequest;
@@ -41,22 +42,27 @@ public class SatellitesMap {
 		return satellites;
 	}
 	
-	public void completeDataForSatellite(SatelliteRequest s) throws SatelliteDoesNotExistsException {
+	public void updateDataSatellites(SatelliteRequest[] satellites) {
+		//Guardo la información recibida en mis satelites rebeldes
+		Arrays.stream(satellites).parallel().forEach(s -> completeDataForSatellite(s));
+	}
+	
+	public void completeDataForSatellite(SatelliteRequest s) {
 		Satellite updateSatellite = satellites.get(s.getName().toLowerCase());
 		try {
 			updateSatellite.setReceiptMessage(s.getMessage());
 			updateSatellite.setDistanceFromShip(s.getDistance());
 			satellites.put(updateSatellite.getName(), updateSatellite);
 		} catch (NullPointerException e) {
-			throw new SatelliteDoesNotExistsException("No existe el satelite: " + s.getName() 
+			throw new EntityNotFoundException("No existe el satelite: " + s.getName() 
 				+ " enviado como parametro");
 		}
 		
 	}
 	
 	public void clearInfoData() {
-		satellites.values().forEach(s -> {
-			s.setDistanceFromShip(0.0);
+		satellites.values().parallelStream().forEach(s -> {
+			s.setDistanceFromShip(null);
 			s.setReceiptMessage(null);
 		});
 	}

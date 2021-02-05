@@ -1,10 +1,12 @@
 package com.mercadolibre.app.model;
 
+import java.util.Arrays;
+
 public class Satellite {
 
 	private String name;
 	private Position position;
-	private double distanceFromShip;
+	private Double distanceFromShip;
 	private String[] receiptMessage;
 
 	public Satellite() {
@@ -31,11 +33,11 @@ public class Satellite {
 		this.position = position;
 	}
 
-	public double getDistanceFromShip() {
+	public Double getDistanceFromShip() {
 		return distanceFromShip;
 	}
 
-	public void setDistanceFromShip(double distanceFromShip) {
+	public void setDistanceFromShip(Double distanceFromShip) {
 		this.distanceFromShip = distanceFromShip;
 	}
 
@@ -45,6 +47,12 @@ public class Satellite {
 
 	public void setReceiptMessage(String[] receiptMessage) {
 		this.receiptMessage = receiptMessage;
+	}
+
+	@Override
+	public String toString() {
+		return "Satellite [name=" + name + ", position=" + position + ", distanceFromShip=" + distanceFromShip
+				+ ", receiptMessage=" + Arrays.toString(receiptMessage) + "]";
 	}
 
 }

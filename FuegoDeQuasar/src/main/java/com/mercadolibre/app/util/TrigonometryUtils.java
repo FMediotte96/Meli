@@ -28,87 +28,21 @@ public class TrigonometryUtils {
 	public static Position trilateracion(Position p1, Position p2, Position p3, 
 			double r1, double r2, double r3) {
 
+		Position[] intersections = getInterceptions(p1, p2, r1, r2);
+		
 		Position result = null;
 		
-		//Array que contendra las intersecciones entre el primer satelite y el segundo
-		Position[] intersectionsS1S2 = new Position[2];
-
-		//Distancia total entre los ejes 
-		double distS1S2 = TrigonometryUtils.distanceBetweenPoints(p1, p2);
-
-		// Suma de los radios
-		double radSumR1R2 = r1 + r2;
-
-		// Chequeo si se intersectan los circulos
-		// Si la distancia es mayor a la suma de los radios no se intersectan.
-		if (distS1S2 > radSumR1R2) {
-			// No se intersectan
-			return result;
-		}
-
-		if (distS1S2 < Math.abs(r1 - r2)) {
-			// Un circulo dentro de otro
-			return result;
-		}
-
-		//Distancia del eje al punto medio de los dos ejes que quiero investigar
-		double a = ((r1*r1) - (r2*r2) + (distS1S2*distS1S2)) / (2 * distS1S2);
-		
-		//Para hacer más facil las cuentas me guardo el x e y de los primeros dos puntos
-		double x1 = p1.getX();
-		double y1 = p1.getY();
-		double x2 = p2.getX();
-		double y2 = p2.getY();
-		
-		//Distancia entre los ejes de los satelites
-		double dx = x2 - x1;
-		double dy = y2 - y1;
-		
-		// Coordenadas del punto medio entre los ejes
-		double px2 = x1 + (dx * a / distS1S2);
-		double py2 = y1 + (dy * a / distS1S2);
-		
-		//Si la distancia entre los ejes es igual a la suma de los radios
-		//encontramos la intersección unica entre los dos radios de los satelites
-		if (distS1S2 == radSumR1R2) {
-			Position uniquePoint = new Position(px2, py2);
-			intersectionsS1S2[0] = uniquePoint;
-		} else {
-			
-			// Determino la distancia del punto medio entre los ejes hasta las
-			// intersecciones que quiero obtener utilizo el teorema de pitagora
-			// h ^ 2 = c ^ 2 + c ^ 2
-			double h = Math.sqrt((r1*r1) - (a*a));
-
-			double rx = -dy * (h / distS1S2);
-			double ry = dx * (h / distS1S2);
-
-			//Armo los dos puntos del resultado
-			double xfinal1 = Math.round(px2 + rx);
-			double xfinal2 = Math.round(px2 - rx);
-
-			double yfinal1 = Math.round(py2 + ry);
-			double yfinal2 = Math.round(py2 - ry);
-
-			Position point = new Position(xfinal1, yfinal1);
-			Position point2 = new Position(xfinal2, yfinal2);
-
-			intersectionsS1S2[0] = point;
-			intersectionsS1S2[1] = point2;
-		}
-		
-		/*	Calculo si alguno de los puntos obtenidos lentamente
+		/*	Calculo si alguno de los puntos obtenidos previamente
 			cumple con que la distancia al eje del 3er satelite es igual al radio del mismo
 			en caso de ser correcto, dicho punto es la posición de la nave, si no se encuentra
 			ninguno que cumpla dicha condición, no se puede obtener la posición de la nave imperial
 		*/
-		for(Position p : intersectionsS1S2) {
+		for(Position p : intersections) {
 			if(p != null && distanceBetweenPoints(p, p3) == r3) {
 				result = p;
 				break;
 			}
 		}
-
 		return result;
 
 	}
@@ -121,5 +55,72 @@ public class TrigonometryUtils {
 		//Formula de distancia entre 2 puntos
 		return Math.sqrt(dx*dx + dy*dy);
 	}
+	
+	/** Método para obtener la intercepción entre dos circuferencias */ 
+	public static Position[] getInterceptions(Position p1, Position p2, double r1, double r2) {
+		//Array que contendra las intersecciones entre el primer satelite y el segundo
+		Position[] intersections = new Position[2];
+
+		//Distancia total entre los ejes 
+		double pointsDistance = distanceBetweenPoints(p1, p2);
+
+		// Suma de los radios
+		double sum_radio = r1 + r2;
+
+		// Si la distancia es mayor a la suma de los radios no se intersectan.
+		if (pointsDistance > sum_radio) {
+			return intersections;
+		}
+
+		// Un circulo dentro de otro no posee intersección
+		if (pointsDistance < Math.abs(r1 - r2)) {
+			return intersections;
+		}
+
+		//Distancia del eje al punto medio de los dos posibles puntos que quiero investigar
+		double distance = ((r1*r1) - (r2*r2) + (pointsDistance*pointsDistance)) / (2 * pointsDistance);
+
+		//Distancia entre los puntos separado por coordenadas
+		double dx = p2.getX() - p1.getX();;
+		double dy = p2.getY() -  p1.getY();;
+		
+		// Coordenadas del punto medio entre los ejes
+		double px2 = p1.getX() + (dx * distance / pointsDistance);
+		double py2 = p1.getY() + (dy * distance / pointsDistance);
+		
+		//Si la distancia entre los ejes es igual a la suma de los radios
+		//encontramos la intersección unica entre los dos radios de los satelites
+		if (pointsDistance == sum_radio) {
+			Position uniquePoint = new Position(px2, py2);
+			intersections[0] = uniquePoint;
+			intersections[1] = null;
+		} else {
+			
+			// Determino la distancia del punto medio entre los ejes hasta las
+			// intersecciones que quiero obtener utilizo el teorema de pitagora
+			// h ^ 2 = c ^ 2 + c ^ 2
+			double h = Math.sqrt((r1*r1) - (distance*distance));
+
+			//Determino el offset de las interseccions desde el punto medio encontrado
+			double rx = -dy * (h / pointsDistance);
+			double ry = dx * (h / pointsDistance);
+
+			//Armo los dos puntos del resultado
+			double xfinal1 = Math.round(px2 + rx);
+			double yfinal1 = Math.round(py2 + ry);
+
+			double xfinal2 = Math.round(px2 - rx);
+			double yfinal2 = Math.round(py2 - ry);
+
+			Position point = new Position(xfinal1, yfinal1);
+			Position point2 = new Position(xfinal2, yfinal2);
+
+			intersections[0] = point;
+			intersections[1] = point2;
+		}
+		
+		return intersections;
+	}
+	
 	
 }

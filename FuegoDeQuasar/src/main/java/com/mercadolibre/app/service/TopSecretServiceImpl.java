@@ -1,14 +1,13 @@
 package com.mercadolibre.app.service;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import org.apache.logging.log4j.util.Strings;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.mercadolibre.app.exceptions.SatelliteDoesNotExistsException;
+import com.mercadolibre.app.exceptions.EntityNotFoundException;
+import com.mercadolibre.app.exceptions.NotEnoughInformationException;
 import com.mercadolibre.app.model.Position;
 import com.mercadolibre.app.model.Satellite;
 import com.mercadolibre.app.model.SatelliteRequest;
@@ -23,13 +22,12 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	private static SatellitesMap satellitesMap = SatellitesMap.getInstance();
 	
 	@Override
-	public TopSecretResponse decodeAndLocalize(List<SatelliteRequest> satellitesRequest) throws SatelliteDoesNotExistsException {
+	public TopSecretResponse decodeAndLocalize(SatelliteRequest[] satellitesRequest) {
 		
 		TopSecretResponse topSecret = new TopSecretResponse();
-		//Guardo la información recibida en mis satelites rebeldes
-		for(SatelliteRequest s : satellitesRequest) {
-			satellitesMap.completeDataForSatellite(s);
-		}
+		
+		//Actualizo la distancia y el mensaje de c/satelite
+		satellitesMap.updateDataSatellites(satellitesRequest);
 		
 		//Triangulo la ubicación de la nave imperial y obtengo el mensaje cifrado
 		topSecret = getLocationAndMessage();
@@ -40,10 +38,10 @@ public class TopSecretServiceImpl implements ITopSecretService {
 		return topSecret;
 	}
 	
-	public TopSecretResponse getLocationAndMessage() {
+	public TopSecretResponse getLocationAndMessage() throws EntityNotFoundException {
 		TopSecretResponse topSecret = new TopSecretResponse();
 		
-		//Primero calculo el mensaje cifrado
+		//Obtengo los mensajes recibidos por los 3 satelites
 		Object[] messagesObject = satellitesMap.getSatellites().values()
 				.stream()
 				.map(it -> it.getReceiptMessage())
@@ -51,6 +49,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 		
 		String[][] messages = Arrays.copyOf(messagesObject, messagesObject.length, String[][].class);
 		
+		//Trato de descifrar el mensaje 
 		String message = getMessage(messages);
 		
 		//Si no pude descifrar el mensaje no calculo la posición
@@ -59,11 +58,14 @@ public class TopSecretServiceImpl implements ITopSecretService {
 		}
 		topSecret.setMessage(message);
 		
-		//Ya descifre el mensaje ahora quiero determinar la posición de la nave imperial
+		/* Ya descifre el mensaje ahora quiero determinar la posición de la nave imperial
+			por lo que obtengo las distancias de los satelites a la nave */
 		double[] distances = satellitesMap.getSatellites().values()
 				.stream()
 				.mapToDouble(i -> i.getDistanceFromShip())
 				.toArray();
+		
+		//Trato de triangular la posición
 		Position pos = getLocation(distances);
 		
 		//Si no me fue posible determinar la posición retorno el topSecret solo con el msj
@@ -76,13 +78,19 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	}
 
 	/**
-	 * Método que resuelve la posición de la nave imperial dados 3 posiciones
+	 * Método que resuelve la posición de la nave imperial dadas 3 posiciones
 	 * de satelites de los rebeldes. Se utiliza el concepto de trilateración para 
-	 * determinar la posición de la nave
+	 * determinar la posición de la nave (Implementando fn Nivel 1)
 	 * @param distances
 	 * @return posicion nave imperial
 	 */
 	public Position getLocation(double[] distances) {
+		
+		//Si no tengo todas las distancias hacia la nave no puede determinar su posición
+		if(satellitesMap.getSatellites().values().stream().anyMatch(s -> s.getDistanceFromShip() == null)) {
+			throw new NotEnoughInformationException("No hay suficiente información para triangular la ubicación "
+					+ "y el mensaje enviado por la nave imperial");
+		}
 		
 		Position[] positions = new Position[3];
 		
@@ -102,11 +110,16 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	}
 		
 	/**
-	 * Método que descifra el mensaje recibido en las distintas naves
+	 * Método que descifra el mensaje recibido en las distintas naves (Implementando fn Nivel 1)
 	 * @param messages
 	 * @return
 	 */
 	public String getMessage(String[] ... messages) {
+		
+		if(Arrays.stream(messages).anyMatch(Objects::isNull)) {
+			throw new NotEnoughInformationException("No hay suficiente información para triangular la ubicación "
+					+ "y el mensaje enviado por la nave imperial");
+		}
 		
 		String[] decodeMessage = new String[messages[0].length];
 		
@@ -124,7 +137,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 			}
 		}
 		
-		return StringUtils.join(Arrays.asList(decodeMessage), ' ');
+		return Strings.join(Arrays.asList(decodeMessage), ' ');
 	}
 
 
@@ -134,41 +147,12 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	 */
 	@Override
 	public TopSecretResponse decodeAndLocalizeSplit() {
-		TopSecretResponse topSecret = new TopSecretResponse();
-		
-		//Obtengo los mensajes vacios de cada nave
-		List<String[]> messages = satellitesMap.getSatellites().values()
-											.stream()
-											.map(it -> it.getReceiptMessage())
-											.filter(it -> it == null)
-											.collect(Collectors.toList());
-		
-		//Si no tengo todas las parte del mensaje no puedo decodificar el mismo
-		if(!messages.isEmpty()) {
-			return topSecret;
-		}
-		
-		//Obtengo las distancias que no estan seteadas aún en mi singleton
-		double[] distances = satellitesMap.getSatellites().values()
-											.stream()
-											.mapToDouble(s -> s.getDistanceFromShip())
-											.filter(distance -> distance == 0.0)
-											.toArray();
-		
-		//Si no tengo todas las distancias hacia la nave no puede determinar su posición
-		if(distances.length != 0) {
-			return topSecret;
-		}
-		
-		//Si llegue hasta acá es porque tengo la información suficiente, 
-		//sin embargo puede pasar de que no se pueda triangular la posicion
-		topSecret = getLocationAndMessage();
-		
+		TopSecretResponse topSecret = getLocationAndMessage();
 		return topSecret;
 	}
 
 	@Override
-	public Satellite setDistanceAndMessage(SatelliteRequest satelliteRequest) throws SatelliteDoesNotExistsException {
+	public Satellite setDistanceAndMessage(SatelliteRequest satelliteRequest) {
 		satellitesMap.completeDataForSatellite(satelliteRequest);
 		return satellitesMap.getSatellites().get(satelliteRequest.getName());
 	}

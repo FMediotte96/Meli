@@ -1,7 +1,6 @@
 package com.mercadolibre.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mercadolibre.app.exceptions.NotEnoughInformationException;
-import com.mercadolibre.app.exceptions.SatelliteDoesNotExistsException;
 import com.mercadolibre.app.model.Satellite;
 import com.mercadolibre.app.model.SatelliteRequest;
 import com.mercadolibre.app.model.TopSecretResponse;
@@ -26,22 +23,22 @@ public class TopSecretSplitRestController {
 	
 	@PostMapping(path = "/{satellite_name}")
 	public ResponseEntity<Satellite> setDistanceAndMessage(@PathVariable("satellite_name") String name,
-			@RequestBody SatelliteRequest satelliteRequest) throws SatelliteDoesNotExistsException {
+			@RequestBody SatelliteRequest satelliteRequest) {
 		satelliteRequest.setName(name);
 		Satellite infoSatellite = topSecretService.setDistanceAndMessage(satelliteRequest);
-		return new ResponseEntity<>(infoSatellite,HttpStatus.OK);
+		return ResponseEntity.ok(infoSatellite);
 		
 	}
 	
 	@GetMapping
-	public ResponseEntity<TopSecretResponse> decodeAndLocalizeSplit() throws NotEnoughInformationException {
+	public ResponseEntity<TopSecretResponse> decodeAndLocalizeSplit() {
 		TopSecretResponse response = topSecretService.decodeAndLocalizeSplit();
 		if(response.getMessage() == null) {
-			throw new NotEnoughInformationException("No hay suficiente información");
+			return ResponseEntity.notFound().build();
 		}
 		if(response.getPosition() == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		return ResponseEntity.ok(response);
 	}
 }

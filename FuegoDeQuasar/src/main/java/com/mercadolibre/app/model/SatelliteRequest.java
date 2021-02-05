@@ -1,5 +1,7 @@
 package com.mercadolibre.app.model;
 
+import java.util.Arrays;
+
 public class SatelliteRequest {
 
 	private String name;
@@ -37,6 +39,12 @@ public class SatelliteRequest {
 
 	public void setMessage(String[] message) {
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "SatelliteRequest [name=" + name + ", distance=" + distance + ", message=" + Arrays.toString(message)
+				+ "]";
 	}
 
 }

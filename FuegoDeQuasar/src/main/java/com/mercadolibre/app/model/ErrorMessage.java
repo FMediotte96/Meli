@@ -1,33 +1,38 @@
 package com.mercadolibre.app.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ErrorMessage {
-	private Date timestamp;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	private LocalDateTime timestamp;
+	private int statusCode;
 	private String message;
+	private String description;
 
-	public ErrorMessage() {
-	}
-
-	public ErrorMessage(Date timestamp, String message) {
+	public ErrorMessage(LocalDateTime timestamp, int statusCode, String message, String description) {
 		this.timestamp = timestamp;
+		this.statusCode = statusCode;
 		this.message = message;
+		this.description = description;
 	}
 
-	public Date getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+	public int getStatusCode() {
+		return statusCode;
 	}
 
 	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public String getDescription() {
+		return description;
 	}
 
 }

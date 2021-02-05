@@ -1,20 +1,19 @@
 package com.mercadolibre.app.model;
 
-import java.util.List;
-
 public class TopSecretRequest {
-	
-	private List<SatelliteRequest> satellites;
-	
+
+	private SatelliteRequest[] satellites;
+
 	public TopSecretRequest() {
 	}
 
-	public List<SatelliteRequest> getSatellites() {
+	public SatelliteRequest[] getSatellites() {
 		return satellites;
 	}
 
-	public void setSatellites(List<SatelliteRequest> satellites) {
+	public void setSatellites(SatelliteRequest[] satellites) {
 		this.satellites = satellites;
 	}
-	
+
+
 }
