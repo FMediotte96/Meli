@@ -21,10 +21,7 @@ public class TopSecretRestController {
 	@PostMapping
 	public ResponseEntity<TopSecretResponse> decodeAndLocalize(@RequestBody TopSecretRequest topSecretRequest) {
 		TopSecretResponse topSecret = topSecretService.decodeAndLocalize(topSecretRequest.getSatellites());
-		if(topSecret.getMessage() == null) {
-			return ResponseEntity.notFound().build();
-		}
-		if(topSecret.getPosition() == null) {
+		if(topSecret.getMessage() == null || topSecret.getPosition() == null) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(topSecret);

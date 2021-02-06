@@ -1,5 +1,8 @@
 package com.mercadolibre.api.util;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+
 import com.mercadolibre.api.model.Position;
 
 /**
@@ -8,6 +11,8 @@ import com.mercadolibre.api.model.Position;
  * @author fmediotte
  */
 public class TrigonometryUtils {
+	
+	public static final String MARGEN = "###.####";
 
 	/**
 	 * Esta función es utilizada para calcular el punto de intersección 
@@ -28,7 +33,7 @@ public class TrigonometryUtils {
 	public static Position trilateracion(Position p1, Position p2, Position p3, 
 			double r1, double r2, double r3) {
 
-		Position[] intersections = getInterceptions(p1, p2, r1, r2);
+		Position[] intersections = getIntersections(p1, p2, r1, r2);
 		
 		Position result = null;
 		
@@ -38,7 +43,7 @@ public class TrigonometryUtils {
 			ninguno que cumpla dicha condición, no se puede obtener la posición de la nave imperial
 		*/
 		for(Position p : intersections) {
-			if(p != null && distanceBetweenPoints(p, p3) == r3) {
+			if(p != null && cleanDecimals(distanceBetweenPoints(p, p3)) == cleanDecimals(r3)) {
 				result = p;
 				break;
 			}
@@ -57,7 +62,7 @@ public class TrigonometryUtils {
 	}
 	
 	/** Método para obtener la intercepción entre dos circuferencias */ 
-	public static Position[] getInterceptions(Position p1, Position p2, double r1, double r2) {
+	public static Position[] getIntersections(Position p1, Position p2, double r1, double r2) {
 		//Array que contendra las intersecciones entre el primer satelite y el segundo
 		Position[] intersections = new Position[2];
 
@@ -81,12 +86,12 @@ public class TrigonometryUtils {
 		double distance = ((r1*r1) - (r2*r2) + (pointsDistance*pointsDistance)) / (2 * pointsDistance);
 
 		//Distancia entre los puntos separado por coordenadas
-		double dx = p2.getX() - p1.getX();;
-		double dy = p2.getY() -  p1.getY();;
+		double dx = p2.getX() - p1.getX();
+		double dy = p2.getY() -  p1.getY();
 		
 		// Coordenadas del punto medio entre los ejes
-		double px2 = p1.getX() + (dx * distance / pointsDistance);
-		double py2 = p1.getY() + (dy * distance / pointsDistance);
+		double px2 = p1.getX() + ((distance * dx) / pointsDistance);
+		double py2 = p1.getY() + ((distance * dy) / pointsDistance);
 		
 		//Si la distancia entre los ejes es igual a la suma de los radios
 		//encontramos la intersección unica entre los dos radios de los satelites
@@ -102,15 +107,15 @@ public class TrigonometryUtils {
 			double h = Math.sqrt((r1*r1) - (distance*distance));
 
 			//Determino el offset de las interseccions desde el punto medio encontrado
-			double rx = -dy * (h / pointsDistance);
-			double ry = dx * (h / pointsDistance);
+			double rx = (h * dy) / pointsDistance;
+			double ry = (h * dx) / pointsDistance;
 
 			//Armo los dos puntos del resultado
-			double xfinal1 = Math.round(px2 + rx);
-			double yfinal1 = Math.round(py2 + ry);
-
-			double xfinal2 = Math.round(px2 - rx);
-			double yfinal2 = Math.round(py2 - ry);
+			double xfinal1 = cleanDecimals(px2 - rx);
+			double yfinal1 = cleanDecimals(py2 + ry);
+			
+			double xfinal2 = cleanDecimals(px2 + rx);
+			double yfinal2 = cleanDecimals(py2 - ry);
 
 			Position point = new Position(xfinal1, yfinal1);
 			Position point2 = new Position(xfinal2, yfinal2);
@@ -122,5 +127,53 @@ public class TrigonometryUtils {
 		return intersections;
 	}
 	
+	//Solución con angulos
+	public static Position[] getIntersect(Position p1, Position p2, double r1, double r2) {
+
+        double distance = distanceBetweenPoints(p1, p2);
+		distance = ((r1*r1) - (r2*r2) + (distance*distance)) / (2 * distance);
+        distance /= r1;
+
+        if (distance > 1) {
+            return new Position[]{null, null};
+        }
+
+        double angulo = Math.acos(distance);
+
+        double px = p2.getX() - p1.getX();
+        double py = p2.getY() - p1.getY();
+        double atan2 = Math.atan2(py, px); //angulo entre ejes
+
+        if (distance == 1) {
+            Position pf = getPosicionWithAngle(p1,r1, atan2 + angulo);
+            return new Position[]{pf, null};
+        }
+
+        Position pf1 = getPosicionWithAngle(p1,r1, atan2 + angulo);
+        Position pf2 = getPosicionWithAngle(p1,r1, atan2 - angulo);
+        return new Position[]{pf1, pf2};
+    }
+	
+	public static Position getPosicionWithAngle(Position p, double r, double angle) {
+        double x = p.getX() + (r * Math.cos(angle));
+        double y = p.getY() + (r * Math.sin(angle));
+
+        x = cleanDecimals(x);
+        y = cleanDecimals(y);
+
+        return new Position(x, y);
+    }
+
+    public static double cleanDecimals(Number x) {
+    	try {
+	        DecimalFormat decimalFormat = new DecimalFormat(MARGEN);
+	        String format = decimalFormat.format(x);
+			x = decimalFormat.parse(format);
+			x = x.doubleValue() == 0 ? 0 : x;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        return x.doubleValue();
+    }
 	
 }

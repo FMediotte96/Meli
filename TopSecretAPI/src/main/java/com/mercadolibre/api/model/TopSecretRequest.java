@@ -15,5 +15,4 @@ public class TopSecretRequest {
 		this.satellites = satellites;
 	}
 
-
 }

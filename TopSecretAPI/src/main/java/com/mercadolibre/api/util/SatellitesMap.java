@@ -23,9 +23,9 @@ public class SatellitesMap {
 
 	private SatellitesMap() {
 		//NO OLVIDAR MODIFICAR LAS POSICIONES DE LOS SATELITES
-		Satellite kenobi = new Satellite("kenobi", new Position(0,0));
-		Satellite skywalker = new Satellite("skywalker", new Position(10,10));
-		Satellite sato = new Satellite("sato", new Position(0,20));
+		Satellite kenobi = new Satellite("kenobi", new Position(-5,-2));
+		Satellite skywalker = new Satellite("skywalker", new Position(1,-1));
+		Satellite sato = new Satellite("sato", new Position(5,1));
 		
 		satellites = new LinkedHashMap<String, Satellite>();
 		
