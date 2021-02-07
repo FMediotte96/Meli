@@ -70,6 +70,32 @@ public class TopSecretSplitRestControllerTest {
 				.andExpect(jsonPath("$.message", is(message)));
 	}
 	
+	@Test
+	public void decodeAndLocalizeMessageNotOk() throws Exception {
+		
+		Position p = new Position(3,0);
+		String message = null;
+		
+		TopSecretResponse response = new TopSecretResponse(p, message);
+		when(service.decodeAndLocalizeSplit()).thenReturn(response);
+		
+		mockMvc.perform(get("/topsecret_split"))
+				.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	public void decodeAndLocalizePositionNotOk() throws Exception {
+		
+		Position p = null;
+		String message = "este es un mensaje secreto";
+		
+		TopSecretResponse response = new TopSecretResponse(p, message);
+		when(service.decodeAndLocalizeSplit()).thenReturn(response);
+		
+		mockMvc.perform(get("/topsecret_split"))
+				.andExpect(status().isNotFound());
+	}
+	
 	public static String asJsonString(final Object obj) {
 	    try {
 	        return new ObjectMapper().writeValueAsString(obj);

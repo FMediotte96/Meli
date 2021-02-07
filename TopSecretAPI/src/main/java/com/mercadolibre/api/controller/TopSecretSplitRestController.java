@@ -33,10 +33,7 @@ public class TopSecretSplitRestController {
 	@GetMapping
 	public ResponseEntity<TopSecretResponse> decodeAndLocalizeSplit() {
 		TopSecretResponse response = topSecretService.decodeAndLocalizeSplit();
-		if(response.getMessage() == null) {
-			return ResponseEntity.notFound().build();
-		}
-		if(response.getPosition() == null) {
+		if(response.getMessage() == null || response.getPosition() == null) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(response);

@@ -58,8 +58,6 @@ public class Satellite {
 	@Override
 	public boolean equals(Object obj) {
 		return ((this.name == ((Satellite)obj).getName()) &&
-				(this.position.equals(((Satellite)obj).getPosition())) &&
-				(this.distanceFromShip == ((Satellite)obj).getDistanceFromShip()) &&
-				(this.receiptMessage == ((Satellite)obj).getReceiptMessage()));
+				(this.position.equals(((Satellite)obj).getPosition())));
 	}
 }

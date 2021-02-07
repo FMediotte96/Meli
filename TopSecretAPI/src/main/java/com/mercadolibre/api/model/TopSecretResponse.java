@@ -28,5 +28,11 @@ public class TopSecretResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this.position.equals(((TopSecretResponse)obj).getPosition()) &&
+				this.message.equals(((TopSecretResponse)obj).getMessage());
+	}
 
 }

@@ -44,7 +44,7 @@ public class SatellitesMap {
 	
 	public void updateDataSatellites(SatelliteRequest[] satellites) {
 		//Guardo la información recibida en mis satelites rebeldes
-		Arrays.stream(satellites).parallel().forEach(s -> completeDataForSatellite(s));
+		Arrays.stream(satellites).forEach(s -> completeDataForSatellite(s));
 	}
 	
 	public void completeDataForSatellite(SatelliteRequest s) {
