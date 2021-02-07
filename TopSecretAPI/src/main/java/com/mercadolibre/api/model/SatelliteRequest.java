@@ -1,8 +1,8 @@
 package com.mercadolibre.api.model;
 
 import java.util.Arrays;
-
 public class SatelliteRequest {
+
 
 	private String name;
 	private double distance;

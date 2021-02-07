@@ -1,4 +1,4 @@
-package com.mercadolibre.app;
+package com.mercadolibre.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TopSecretAPIApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		TopSecretAPIApplication.main(new String[] {});
 	}
 
 }

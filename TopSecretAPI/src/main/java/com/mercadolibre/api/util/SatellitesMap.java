@@ -1,9 +1,10 @@
 package com.mercadolibre.api.util;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.mercadolibre.api.enums.SatellitesEnum;
 import com.mercadolibre.api.exceptions.EntityNotFoundException;
 import com.mercadolibre.api.model.Position;
 import com.mercadolibre.api.model.Satellite;
@@ -12,7 +13,7 @@ import com.mercadolibre.api.model.SatelliteRequest;
 public class SatellitesMap {
 	
 	private static SatellitesMap instance;
-	private HashMap<String, Satellite> satellites;
+	private Map<String, Satellite> satellites;
 
 	public static SatellitesMap getInstance() {
 		if(instance == null) {
@@ -22,10 +23,9 @@ public class SatellitesMap {
 	}
 
 	private SatellitesMap() {
-		//NO OLVIDAR MODIFICAR LAS POSICIONES DE LOS SATELITES
-		Satellite kenobi = new Satellite("kenobi", new Position(-5,-2));
-		Satellite skywalker = new Satellite("skywalker", new Position(1,-1));
-		Satellite sato = new Satellite("sato", new Position(5,1));
+		Satellite kenobi = new Satellite(SatellitesEnum.KENOBI.getName(), new Position(-500,-200));
+		Satellite skywalker = new Satellite(SatellitesEnum.SKYWALKER.getName(), new Position(100,-100));
+		Satellite sato = new Satellite(SatellitesEnum.SATO.getName(), new Position(500,100));
 		
 		satellites = new LinkedHashMap<String, Satellite>();
 		
@@ -38,7 +38,7 @@ public class SatellitesMap {
 		return satellites.get(name);
 	}
 	
-	public HashMap<String, Satellite> getSatellites() {
+	public Map<String, Satellite> getSatellites() {
 		return satellites;
 	}
 	
