@@ -18,6 +18,8 @@ import com.mercadolibre.api.model.Position;
 import com.mercadolibre.api.model.Satellite;
 import com.mercadolibre.api.service.IPositionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/position")
 public class PositionRestController {
@@ -27,6 +29,7 @@ public class PositionRestController {
 	@Autowired
 	private IPositionService positionService;
 	
+	@Operation(summary = "Change Satellite Position")
 	@PutMapping("/{satellite_name}")
 	public ResponseEntity<Satellite> changeSatellitePosition(@PathVariable("satellite_name") String satelliteName, 
 			@RequestBody Position position) {
@@ -38,12 +41,14 @@ public class PositionRestController {
 		
 	}
 	
+	@Operation(summary = "Restart all Satellites Position")
 	@PostMapping("/restart")
 	public ResponseEntity<Map<String,Satellite>> restartPositionByDefault() {
 		Map<String, Satellite> result = positionService.resetDefaultPositionValue();
 		return ResponseEntity.ok(result);
 	}
 	
+	@Operation(summary = "Get all Satellites Position")
 	@GetMapping
 	public ResponseEntity<Map<String,Satellite>> getAllSatellitesPosition() {
 		Map<String, Satellite> result = positionService.getAllSatellitesPosition();

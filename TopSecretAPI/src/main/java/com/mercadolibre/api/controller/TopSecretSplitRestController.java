@@ -14,6 +14,9 @@ import com.mercadolibre.api.model.SatelliteRequest;
 import com.mercadolibre.api.model.TopSecretResponse;
 import com.mercadolibre.api.service.ITopSecretService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("/topsecret_split")
 public class TopSecretSplitRestController {
@@ -21,6 +24,7 @@ public class TopSecretSplitRestController {
 	@Autowired
 	private ITopSecretService topSecretService;
 	
+	@Operation(summary = "Set the distance and the message receive from the imperialship")
 	@PostMapping(path = "/{satellite_name}")
 	public ResponseEntity<Satellite> setDistanceAndMessage(@PathVariable("satellite_name") String name,
 			@RequestBody SatelliteRequest satelliteRequest) {
@@ -30,6 +34,7 @@ public class TopSecretSplitRestController {
 		
 	}
 	
+	@Operation(summary = "Decode the imperialship message and its location if it has the complete information to do it")
 	@GetMapping
 	public ResponseEntity<TopSecretResponse> decodeAndLocalizeSplit() {
 		TopSecretResponse response = topSecretService.decodeAndLocalizeSplit();

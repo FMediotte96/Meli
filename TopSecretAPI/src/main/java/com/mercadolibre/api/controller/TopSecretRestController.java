@@ -11,6 +11,8 @@ import com.mercadolibre.api.model.TopSecretRequest;
 import com.mercadolibre.api.model.TopSecretResponse;
 import com.mercadolibre.api.service.ITopSecretService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/topsecret")
 public class TopSecretRestController {
@@ -18,6 +20,7 @@ public class TopSecretRestController {
 	@Autowired
 	private ITopSecretService topSecretService;
 	
+	@Operation(summary = "Decode the imperialship message and its location")
 	@PostMapping
 	public ResponseEntity<TopSecretResponse> decodeAndLocalize(@RequestBody TopSecretRequest topSecretRequest) {
 		TopSecretResponse topSecret = topSecretService.decodeAndLocalize(topSecretRequest.getSatellites());
