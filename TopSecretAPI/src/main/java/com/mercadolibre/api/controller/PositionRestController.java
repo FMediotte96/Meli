@@ -2,6 +2,8 @@ package com.mercadolibre.api.controller;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import com.mercadolibre.api.service.IPositionService;
 @RestController
 @RequestMapping("/position")
 public class PositionRestController {
+	
+	Logger log = LoggerFactory.getLogger(PositionRestController.class);
 	
 	@Autowired
 	private IPositionService positionService;

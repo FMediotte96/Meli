@@ -17,16 +17,13 @@ import com.mercadolibre.api.util.TrigonometryUtils;
 @Service
 public class TopSecretServiceImpl implements ITopSecretService {
 	
-	//Instancia singleton de los satelites disponibles de la alianza rebelde
-	private static SatellitesMap satellitesMap = SatellitesMap.getInstance();
-	
 	@Override
 	public TopSecretResponse decodeAndLocalize(SatelliteRequest[] satellitesRequest) {
 		
 		TopSecretResponse topSecret = new TopSecretResponse();
 		
 		//Actualizo la distancia y el mensaje de c/satelite
-		satellitesMap.updateDataSatellites(satellitesRequest);
+		SatellitesMap.getInstance().updateDataSatellites(satellitesRequest);
 		
 		//Triangulo la ubicación de la nave imperial y obtengo el mensaje cifrado
 		String message = getDecodeMessage();
@@ -39,7 +36,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 		topSecret.setPosition(position);
 		
 		//Limpio la información recibida de mis satelites para un nuevo request
-		satellitesMap.clearInfoData();
+		SatellitesMap.getInstance().clearInfoData();
 		
 		return topSecret;
 	}
@@ -67,13 +64,13 @@ public class TopSecretServiceImpl implements ITopSecretService {
 
 	@Override
 	public Satellite setDistanceAndMessage(SatelliteRequest satelliteRequest) {
-		satellitesMap.completeDataForSatellite(satelliteRequest);
-		return satellitesMap.getSatellites().get(satelliteRequest.getName());
+		SatellitesMap.getInstance().completeDataForSatellite(satelliteRequest);
+		return SatellitesMap.getInstance().getSatellites().get(satelliteRequest.getName());
 	}
 	
 	public String getDecodeMessage() {
 		//Obtengo los mensajes recibidos por los 3 satelites
-		Object[] messagesObject = satellitesMap.getSatellites().values()
+		Object[] messagesObject = SatellitesMap.getInstance().getSatellites().values()
 				.stream()
 				.map(it -> it.getReceiptMessage())
 				.toArray();
@@ -87,7 +84,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	public Position getImperialShipLocation() {
 		/* Ya descifre el mensaje ahora quiero determinar la posición de la nave imperial
 			por lo que obtengo las distancias de los satelites a la nave */
-		double[] distances = satellitesMap.getSatellites().values()
+		double[] distances = SatellitesMap.getInstance().getSatellites().values()
 				.stream()
 				.mapToDouble(i -> i.getDistanceFromShip())
 				.toArray();
@@ -106,7 +103,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 	public Position getLocation(double[] distances) {
 		
 		//Si no tengo todas las distancias hacia la nave no puede determinar su posición
-		if(satellitesMap.getSatellites().values().stream().anyMatch(s -> s.getDistanceFromShip() == null)) {
+		if(SatellitesMap.getInstance().getSatellites().values().stream().anyMatch(s -> s.getDistanceFromShip() == null)) {
 			throw new NotEnoughInformationException("No hay suficiente información para triangular la ubicación "
 					+ "y el mensaje enviado por la nave imperial");
 		}
@@ -116,7 +113,7 @@ public class TopSecretServiceImpl implements ITopSecretService {
 		//Hago esta iteración por si el orden en que llega la información de los satelites en el request
 		//es distinta a Kenobi, Skywalker, Sato y para poder utilizar correctamente el vector distances
 		int i = 0;
-		for(Satellite s : satellitesMap.getSatellites().values()) {
+		for(Satellite s : SatellitesMap.getInstance().getSatellites().values()) {
 			positions[i] = s.getPosition();
 			i++;
 		}

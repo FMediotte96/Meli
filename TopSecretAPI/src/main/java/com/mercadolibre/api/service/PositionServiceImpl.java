@@ -11,23 +11,20 @@ import com.mercadolibre.api.util.SatellitesMap;
 @Service
 public class PositionServiceImpl implements IPositionService {
 	
-	private static SatellitesMap satellitesMap = SatellitesMap.getInstance();
-
 	@Override
 	public Satellite changePositionByName(String name, Position position) {
-		return satellitesMap.updatePosition(name, position);
+		return SatellitesMap.getInstance().updatePosition(name, position);
 	}
 
 	@Override
 	public Map<String, Satellite> resetDefaultPositionValue() {
-		satellitesMap.restartPositionByDefault();
-		satellitesMap = SatellitesMap.getInstance();
-		return satellitesMap.getSatellites();
+		SatellitesMap.getInstance().restartPositionByDefault();
+		return SatellitesMap.getInstance().getSatellites();
 	}
 
 	@Override
 	public Map<String, Satellite> getAllSatellitesPosition() {
-		return satellitesMap.getSatellites();
+		return SatellitesMap.getInstance().getSatellites();
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.mercadolibre.api.enums.SatellitesEnum;
@@ -20,8 +20,8 @@ public class SatellitesMapTest {
 	private static final String SATO = SatellitesEnum.SATO.getName();
 
 
-	@BeforeAll
-	public static void getInstance() {
+	@BeforeEach
+	public void getInstance() {
 		satellitesMap = SatellitesMap.getInstance();
 	}
 
