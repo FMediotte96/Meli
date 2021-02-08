@@ -67,4 +67,20 @@ public class SatellitesMap {
 		});
 	}
 	
+	public Satellite updatePosition(String name, Position pos) {
+		Satellite updateSatellite = satellites.get(name.toLowerCase());
+		try {
+			updateSatellite.setPosition(pos);
+			satellites.put(updateSatellite.getName(), updateSatellite);
+		} catch (NullPointerException e) {
+			throw new EntityNotFoundException("No existe el satelite: " + name
+			+ " enviado como parametro");
+		}
+		return updateSatellite;
+	}
+	
+	public void restartPositionByDefault() {
+		instance = new SatellitesMap();
+	}
+	
 }
