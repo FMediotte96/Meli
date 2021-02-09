@@ -28,3 +28,14 @@ Decodifica el mensaje y posición de la nave imperial utilizando el concepto de 
     ]
 }
 ```
+
+**Response:**
+```json
+{
+    "position": {
+        "x": -100.0,
+        "y": 100.0
+    },
+    "message": "este es un mensaje secreto"
+}
+```
