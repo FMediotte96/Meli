@@ -2,9 +2,9 @@
 
 Resetea la configuración por default de los satelites rebeldes, ubicandolos en sus puntos iniciales del ejercicio:
 
-● Kenobi: [-500, -200] 
-● Skywalker: [100, -100] 
-● Sato: [500, 100] 
+* Kenobi: [-500, -200] 
+* Skywalker: [100, -100] 
+* Sato: [500, 100] 
 
 
 **URL** : `/position/restart`
