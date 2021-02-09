@@ -2,7 +2,7 @@
 
 Decodifica el mensaje y posición de la nave imperial utilizando el concepto de trilateración, en caso de tener la información suficiente en cada satellite rebelde.
 
-**URL** : `/topsecret`
+**URL** : `/topsecret_split`
 
 **Método** : `GET`
 
