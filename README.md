@@ -8,6 +8,21 @@ API REST que permite localizar una nave imperial y su mensaje enviado utilizando
 ## Documentación 📄
 * [Swagger-ui](https://swagger.io/) - https://topsecretapi-304122.uc.r.appspot.com/swagger-ui/index.html
 
+### Top Secret Rest
+
+* [DecodeAndLocalize](doc/decodeAndLocalize.md) : `POST /topsecret`
+
+### Top Secret Split
+
+* [SetDistanceAndMessage](doc/setDistanceAndMessage.md) : `POST /topsecret_split/{satellite_name}`
+* [DecodeAndLocalizeSplit](doc/decodeAndLocalizeSplit.md) : `GET /topsecret_split`
+
+### Position Rest Controller
+
+* [ChangeSatellitePosition](doc/changeSatellitePosition.md) : `PUT /position/{satellite_name}`
+* [RestartPositionByDefault](doc/restartPositionByDefault.md) : `POST /position/restart`
+* [GetAllSatellitesPosition](doc/getAllSatellitesPosition.md) : `GET /position`
+
 ## Construido con 🛠️
 
 * [Maven](https://maven.apache.org/) - Dependencias
