@@ -10,18 +10,18 @@ API REST que permite localizar una nave imperial y su mensaje enviado utilizando
 
 ### Top Secret Rest
 
-* [DecodeAndLocalize](doc/decodeAndLocalize.md) : `POST /topsecret`
+* [DecodeAndLocalize](TopSecretAPI/doc/decodeAndLocalize.md) : `POST /topsecret`
 
 ### Top Secret Split
 
-* [SetDistanceAndMessage](doc/setDistanceAndMessage.md) : `POST /topsecret_split/{satellite_name}`
-* [DecodeAndLocalizeSplit](doc/decodeAndLocalizeSplit.md) : `GET /topsecret_split`
+* [SetDistanceAndMessage](TopSecretAPI/doc/setDistanceAndMessage.md) : `POST /topsecret_split/{satellite_name}`
+* [DecodeAndLocalizeSplit](TopSecretAPI/doc/decodeAndLocalizeSplit.md) : `GET /topsecret_split`
 
 ### Position Rest Controller
 
-* [ChangeSatellitePosition](doc/changeSatellitePosition.md) : `PUT /position/{satellite_name}`
-* [RestartPositionByDefault](doc/restartPositionByDefault.md) : `POST /position/restart`
-* [GetAllSatellitesPosition](doc/getAllSatellitesPosition.md) : `GET /position`
+* [ChangeSatellitePosition](TopSecretAPI/doc/changeSatellitePosition.md) : `PUT /position/{satellite_name}`
+* [RestartPositionByDefault](TopSecretAPI/doc/restartPositionByDefault.md) : `POST /position/restart`
+* [GetAllSatellitesPosition](TopSecretAPI/doc/getAllSatellitesPosition.md) : `GET /position`
 
 ## Construido con 🛠️
 
